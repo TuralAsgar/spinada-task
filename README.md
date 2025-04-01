@@ -8,6 +8,7 @@ A robust and secure API built with Node.js, Express, and TypeScript that integra
 * [Security Features](#-security-features)
 * [Further Improvements](#-further-improvements)
 * [API Documentation](#-api-documentation)
+* [Getting Started](#-getting-started)
 * [Development](#-development)
 
 ## ✨ Features
