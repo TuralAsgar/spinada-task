@@ -4,11 +4,11 @@ A robust and secure API built with Node.js, Express, and TypeScript that integra
 
 ## 📚 Table of Contents
 
-- [Features](#features)
-- [Security Features](#security-features)
-- [Further Improvements](#further-improvements)
-- [API Documentation](#api-documentation)
-- [Development](#development)
+* [Features](#-features)
+* [Security Features](#-security-features)
+* [Further Improvements](#-further-improvements)
+* [API Documentation](#-api-documentation)
+* [Development](#-development)
 
 ## ✨ Features
 
