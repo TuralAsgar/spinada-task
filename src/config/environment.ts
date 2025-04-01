@@ -1,19 +1,3 @@
-// import dotenv from 'dotenv';
-// dotenv.config();
-//
-// export const config = {
-//   PORT: process.env.PORT || 3000,
-//   DATABASE_PATH: process.env.DATABASE_PATH || '../database.sqlite',
-//   JWT_SECRET: process.env.JWT_SECRET,
-//   OPENWEATHER_API_KEY: process.env.OPENWEATHER_API_KEY,
-//   COINGECKO_API_KEY: process.env.COINGECKO_API_KEY,
-//   NODE_ENV: process.env.NODE_ENV || 'development',
-// };
-//
-// export const isTest = config.NODE_ENV === 'test';
-// export const isProduction = config.NODE_ENV === 'production';
-// export const isDevelopment = config.NODE_ENV === 'development';
-
 import dotenv from 'dotenv';
 import z from 'zod';
 

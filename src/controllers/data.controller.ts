@@ -7,15 +7,13 @@ import { TypedRequestQuery } from '../types/request.types';
 import { DataQueryParams } from '../types/api.types';
 import { ApiResponse } from '../utils/api-response';
 
-const CACHE_TTL = 300; // 5 minutes
-
 export class DataController {
   private cache: NodeCache;
   private weatherService: WeatherService;
   private cryptoService: CryptoService;
 
   constructor() {
-    this.cache = new NodeCache({ stdTTL: CACHE_TTL });
+    this.cache = new NodeCache({ stdTTL: 300 /*5 minutes*/ });
     this.weatherService = new WeatherService();
     this.cryptoService = new CryptoService();
   }
