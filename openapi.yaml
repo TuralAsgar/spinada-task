@@ -1,0 +1,466 @@
+openapi: 3.0.0
+info:
+  title: Spinada API
+  version: 1.0.0
+  description: API documentation for Spinada application
+
+servers:
+  - url: http://localhost:3000/v1
+    description: Local Development Server
+  - url: https://spinada.tural.pro/v1
+    description: Production Server
+
+paths:
+  /auth/register:
+    post:
+      summary: Register a new user
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequestBody'
+      responses:
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflict - User already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/login:
+    post:
+      summary: Login a user
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestBody'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/profile:
+    get:
+      summary: Get user profile
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users:
+    get:
+      summary: Get all users
+      tags:
+        - Users
+      responses:
+        '200':
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+        '500':
+          description: Failed to retrieve users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/{id}:
+    get:
+      summary: Get user by ID
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    patch:
+      summary: Update user by ID
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequestBody'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Failed to update user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Delete user by ID
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Failed to delete user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /data:
+    get:
+      summary: Get combined weather and crypto data
+      tags:
+        - Data
+      parameters:
+        - in: query
+          name: city
+          required: true
+          schema:
+            $ref: '#/components/schemas/CityParam'
+        - in: query
+          name: currency
+          required: true
+          schema:
+            $ref: '#/components/schemas/CurrencyParam'
+        - in: query
+          name: refresh
+          required: false
+          schema:
+            $ref: '#/components/schemas/RefreshParam'
+      responses:
+        '200':
+          description: Combined weather and crypto data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CombinedDataResponse'
+        '400':
+          description: Bad request - Missing required parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Indicates if the request was successful
+        data:
+          type: object
+          description: Response payload
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Error code for client-side handling
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              description: Additional error details (validation errors, etc.)
+      required:
+        - success
+
+    ValidationError:
+      type: object
+      properties:
+        field:
+          type: string
+          description: The field that failed validation
+        message:
+          type: string
+          description: Validation error message
+      required:
+        - field
+        - message
+
+    RegisterRequestBody:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          example: 'user@example.com'
+        password:
+          type: string
+          minLength: 5
+          format: password
+          example: 'user123'
+      required:
+        - name
+        - email
+        - password
+
+    LoginRequestBody:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+      required:
+        - email
+        - password
+
+    UpdateUserRequestBody:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 50
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+          format: password
+        role:
+          type: string
+          enum: [ 'user', 'admin' ]
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum: [ 'user', 'admin' ]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    LoginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: JWT access token
+        refreshToken:
+          type: string
+          description: JWT refresh token
+        expiresIn:
+          type: number
+          description: Token expiration time in seconds
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+
+    WeatherResponse:
+      type: object
+      properties:
+        city:
+          type: string
+          example: 'London'
+        temperature:
+          type: string
+          example: '15°C'
+        weather:
+          type: string
+          example: 'Cloudy'
+      required:
+        - city
+        - temperature
+        - weather
+
+    CryptoResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Bitcoin'
+        price_usd:
+          type: number
+          format: float
+          example: 45000.50
+      required:
+        - name
+        - price_usd
+
+    CombinedDataResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                city:
+                  type: string
+                  example: 'London'
+                temperature:
+                  type: string
+                  example: '15°C'
+                weather:
+                  type: string
+                  example: 'Cloudy'
+                crypto:
+                  $ref: '#/components/schemas/CryptoResponse'
+              required:
+                - city
+                - temperature
+                - weather
+                - crypto
+
+    CityParam:
+      type: string
+      minLength: 2
+      maxLength: 50
+      pattern: '^[a-zA-Z\s-]+$'
+      description: City name for weather data
+      example: 'London'
+
+    CurrencyParam:
+      type: string
+      minLength: 2
+      maxLength: 10
+      pattern: '^[A-Z]+$'
+      description: Cryptocurrency symbol (e.g., BTC, ETH)
+      example: 'BTC'
+
+    RefreshParam:
+      type: string
+      description: Force refresh cache. Use 'true' to force refresh, 'false' or omit to use cache.
+      enum: [ 'true', 'false' ]
+      default: 'false'
+      example: 'true'
+
+    DataQueryParams:
+      type: object
+      properties:
+        city:
+          $ref: '#/components/schemas/CityParam'
+        currency:
+          $ref: '#/components/schemas/CurrencyParam'
+        refresh:
+          $ref: '#/components/schemas/RefreshParam'
+      required:
+        - city
+        - currency

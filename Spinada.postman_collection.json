@@ -1,0 +1,542 @@
+{
+	"info": {
+		"_postman_id": "58a4420c-f33b-4a35-89b9-ffb9f51c2b26",
+		"name": "Spinada",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "911492"
+	},
+	"item": [
+		{
+			"name": "/auth/register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Tural\",\n    \"email\":\"hi@tural.pro\",\n    \"password\":\"123456\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{spinada_url}}/auth/register",
+					"host": [
+						"{{spinada_url}}"
+					],
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/login-regular",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json(); // Parse response JSON",
+							"pm.environment.set(\"spinada_auth\", jsonData.data.token); // Save token to an environment variable"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"user@example.com\",\n    \"password\":\"user123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{spinada_url}}/auth/login",
+					"host": [
+						"{{spinada_url}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/login-admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json(); // Parse response JSON",
+							"pm.environment.set(\"spinada_auth\", jsonData.data.token); // Save token to an environment variable"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\":\"admin@example.com\",\n    \"password\":\"admin123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{spinada_url}}/auth/login",
+					"host": [
+						"{{spinada_url}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/auth/profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json(); // Parse response JSON",
+							"if (jsonData.data.role === 'user') {",
+							"    pm.environment.set('spinada_regular_user_id', jsonData.data.id); // Save user id to an environment variable",
+							"}",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{spinada_auth}}"
+					}
+				],
+				"url": {
+					"raw": "{{spinada_url}}/auth/profile",
+					"host": [
+						"{{spinada_url}}"
+					],
+					"path": [
+						"auth",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{spinada_auth}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{spinada_url}}/users",
+					"host": [
+						"{{spinada_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users/regular-user-id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{spinada_auth}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{spinada_url}}/users/{{spinada_regular_user_id}}",
+					"host": [
+						"{{spinada_url}}"
+					],
+					"path": [
+						"users",
+						"{{spinada_regular_user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users/5471d70e-549d-4ba0-9733-e83bdd11b4df",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{spinada_auth}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Updated name\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{spinada_url}}/users/{{spinada_regular_user_id}}",
+					"host": [
+						"{{spinada_url}}"
+					],
+					"path": [
+						"users",
+						"{{spinada_regular_user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users/ca0e7979-30d2-475a-94df-6a56301513fc",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{spinada_auth}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"Asgarov\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{spinada_url}}/users/{{spinada_regular_user_id}}",
+					"host": [
+						"{{spinada_url}}"
+					],
+					"path": [
+						"users",
+						"{{spinada_regular_user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/data?city=Baku&currency=bitcoin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var template = `",
+							"<style type=\"text/css\">",
+							"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+							"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+							"    .tftable tr {background-color:#ffffff;}",
+							"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+							"    .tftable tr:hover {background-color:#e0ffff;}",
+							"</style>",
+							"",
+							"<table class=\"tftable\" border=\"1\">",
+							"    <tr>",
+							"        <th>City</th>",
+							"        <th>Temperature</th>",
+							"        <th>Weather</th>",
+							"        <th>Crypto Name</th>",
+							"        <th>Price (USD)</th>",
+							"    </tr>",
+							"    ",
+							"    <tr>",
+							"        <td>{{response.city}}</td>",
+							"        <td>{{response.temperature}}</td>",
+							"        <td>{{response.weather}}</td>",
+							"        <td>{{response.crypto.name}}</td>",
+							"        <td>{{response.crypto.price_usd}}</td>",
+							"    </tr>",
+							"</table>",
+							"`;",
+							"",
+							"function constructVisualizerPayload() {",
+							"    var response = pm.response.json();",
+							"    return { response };",
+							"}",
+							"",
+							"pm.visualizer.set(template, constructVisualizerPayload());"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{spinada_auth}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{spinada_url}}/data?city=London&currency=bitcoin",
+					"host": [
+						"{{spinada_url}}"
+					],
+					"path": [
+						"data"
+					],
+					"query": [
+						{
+							"key": "city",
+							"value": "London"
+						},
+						{
+							"key": "currency",
+							"value": "bitcoin"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/data?refresh=true&city=Baku&currency=bitcoin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var template = `",
+							"<style type=\"text/css\">",
+							"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+							"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+							"    .tftable tr {background-color:#ffffff;}",
+							"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+							"    .tftable tr:hover {background-color:#e0ffff;}",
+							"</style>",
+							"",
+							"<table class=\"tftable\" border=\"1\">",
+							"    <tr>",
+							"        <th>City</th>",
+							"        <th>Temperature</th>",
+							"        <th>Weather</th>",
+							"        <th>Crypto Name</th>",
+							"        <th>Price (USD)</th>",
+							"    </tr>",
+							"    ",
+							"    <tr>",
+							"        <td>{{response.city}}</td>",
+							"        <td>{{response.temperature}}</td>",
+							"        <td>{{response.weather}}</td>",
+							"        <td>{{response.crypto.name}}</td>",
+							"        <td>{{response.crypto.price_usd}}</td>",
+							"    </tr>",
+							"</table>",
+							"`;",
+							"",
+							"function constructVisualizerPayload() {",
+							"    var response = pm.response.json();",
+							"    return { response };",
+							"}",
+							"",
+							"pm.visualizer.set(template, constructVisualizerPayload());"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{spinada_auth}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{spinada_url}}/data?refresh=true&city=London&currency=bitcoin",
+					"host": [
+						"{{spinada_url}}"
+					],
+					"path": [
+						"data"
+					],
+					"query": [
+						{
+							"key": "refresh",
+							"value": "true"
+						},
+						{
+							"key": "city",
+							"value": "London"
+						},
+						{
+							"key": "currency",
+							"value": "bitcoin"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
