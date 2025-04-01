@@ -2,6 +2,8 @@
 
 A robust and secure API built with Node.js, Express, and TypeScript that integrates weather and cryptocurrency data.
 
+Watch the [YouTube video](https://youtu.be/SLaLB17beEM) for a detailed walkthrough of the project.
+
 ## 📚 Table of Contents
 
 * [Features](#-features)
