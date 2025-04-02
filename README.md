@@ -4,6 +4,9 @@ A robust and secure API built with Node.js, Express, and TypeScript that integra
 
 Watch the [YouTube video](https://youtu.be/SLaLB17beEM) for a detailed walkthrough of the project.
 
+This is a [technical assignment](API_Integration_Assignment.pdf) for the role Senior Backend Engineer at Spinada.  
+There is no need to implement POST `/v1/data` endpoint.
+
 ## 📚 Table of Contents
 
 * [Features](#-features)
