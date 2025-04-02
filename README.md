@@ -74,6 +74,7 @@ Watch the [YouTube video](https://youtu.be/SLaLB17beEM) for a detailed walkthrou
         - Cache storage
 
 3. **Architecture Improvements**
+    - Implement pagination for `/v1/users` endpoint
     - Implement dependency injection
 
 4. **Developer Experience**
