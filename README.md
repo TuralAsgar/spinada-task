@@ -103,7 +103,7 @@ Watch the [YouTube video](https://youtu.be/SLaLB17beEM) for a detailed walkthrou
 #### Register User
 
 ```http
-POST /auth/register
+POST /v1/auth/register
 Content-Type: application/json
 
 {
@@ -116,7 +116,7 @@ Content-Type: application/json
 #### Login
 
 ```http
-POST /auth/login
+POST /v1/auth/login
 Content-Type: application/json
 
 {
@@ -130,7 +130,7 @@ Content-Type: application/json
 #### Get Combined Weather and Crypto Data
 
 ```http
-GET /data?city=London&currency=BTC&refresh=false
+GET /v1/data?city=London&currency=BTC&refresh=false
 Authorization: Bearer <your_token>
 ```
 
